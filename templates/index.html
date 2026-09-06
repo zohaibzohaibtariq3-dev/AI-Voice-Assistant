@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Voice Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+    <div class="app">
+        <header class="app-header">
+            <div class="logo">
+                <div class="logo-orb" id="logoOrb"></div>
+                <div>
+                    <h1>Voice Assistant</h1>
+                    <p class="subtitle">Speech-to-Text &middot; LLM &middot; Text-to-Speech</p>
+                </div>
+            </div>
+            <button id="resetBtn" class="ghost-btn" title="Clear conversation">Reset</button>
+        </header>
+
+        <main class="chat-panel" id="chatPanel">
+            <div class="empty-state" id="emptyState">
+                <div class="mic-illustration">🎙️</div>
+                <p>Tap the microphone and start talking.</p>
+            </div>
+        </main>
+
+        <div class="status-row" id="statusRow"></div>
+
+        <footer class="controls">
+            <button id="micBtn" class="mic-btn" aria-label="Record">
+                <span class="mic-icon"></span>
+                <span class="pulse-ring"></span>
+            </button>
+            <p class="hint" id="hint">Click to speak</p>
+        </footer>
+    </div>
+
+    <audio id="ttsAudio" hidden></audio>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
