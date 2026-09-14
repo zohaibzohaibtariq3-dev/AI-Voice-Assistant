@@ -1,3 +1,4 @@
+
 """
 AI Voice Assistant — Flask Backend
 
@@ -14,6 +15,15 @@ GET  /health           -> health check
 """
 
 import os
+
+# --------------------------------------------------------------------------
+# Vercel Writable Cache Directories
+# --------------------------------------------------------------------------
+
+os.environ["HF_HOME"] = "/tmp/huggingface"
+os.environ["XDG_CACHE_HOME"] = "/tmp/cache"
+os.environ["TRANSFORMERS_CACHE"] = "/tmp/huggingface"
+
 import uuid
 import logging
 from pathlib import Path
@@ -106,14 +116,14 @@ def get_whisper_model() -> WhisperModel:
             f"'{WHISPER_MODEL_SIZE}' ..."
         )
 
-    _whisper_model = WhisperModel(
-    WHISPER_MODEL_SIZE,
-    device="cpu",
-    compute_type="int8",
-    download_root="/tmp/whisper"
-)
+        _whisper_model = WhisperModel(
+            WHISPER_MODEL_SIZE,
+            device="cpu",
+            compute_type="int8",
+            download_root="/tmp/whisper"
+        )
 
-    logger.info("Whisper model loaded.")
+        logger.info("Whisper model loaded.")
 
     return _whisper_model
 
@@ -334,19 +344,6 @@ def api_chat():
 
 @app.route("/api/converse", methods=["POST"])
 def api_converse():
-    """
-    Full pipeline:
-
-    Audio
-       ↓
-    Whisper
-       ↓
-    Groq
-       ↓
-    JSON response
-
-    Browser JavaScript handles text-to-speech.
-    """
 
     if "audio" not in request.files:
 
@@ -366,12 +363,7 @@ def api_converse():
 
     try:
 
-        # Save audio temporarily in /tmp
         audio_file.save(temp_path)
-
-        # ---------------------------------------------
-        # 1. Speech -> Text
-        # ---------------------------------------------
 
         user_text = transcribe_audio(
             str(temp_path)
@@ -387,17 +379,9 @@ def api_converse():
                 }
             ), 422
 
-        # ---------------------------------------------
-        # 2. Text -> AI Response
-        # ---------------------------------------------
-
         reply = get_llm_response(
             user_text
         )
-
-        # ---------------------------------------------
-        # 3. Return JSON
-        # ---------------------------------------------
 
         return jsonify(
             {
@@ -495,3 +479,4 @@ if __name__ == "__main__":
         port=port,
         debug=True
     )
+
