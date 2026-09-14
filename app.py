@@ -106,13 +106,14 @@ def get_whisper_model() -> WhisperModel:
             f"'{WHISPER_MODEL_SIZE}' ..."
         )
 
-        _whisper_model = WhisperModel(
-            WHISPER_MODEL_SIZE,
-            device="cpu",
-            compute_type="int8"
-        )
+    _whisper_model = WhisperModel(
+    WHISPER_MODEL_SIZE,
+    device="cpu",
+    compute_type="int8",
+    download_root="/tmp/whisper"
+)
 
-        logger.info("Whisper model loaded.")
+    logger.info("Whisper model loaded.")
 
     return _whisper_model
 
